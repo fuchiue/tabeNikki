@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">tabeNikki</string>
+    <string name="CategoryNewCreate">カテゴリ新規作成</string>
+    <string name="NewCategoryWord">新規作成カテゴリを入力</string>
 </resources>
