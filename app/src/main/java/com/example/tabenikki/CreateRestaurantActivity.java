@@ -17,9 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -35,6 +37,9 @@ public class CreateRestaurantActivity extends AppCompatActivity {
     EditText RestNewName;
     ImageView RestNewImg;
 
+    Uri newImagURI;
+
+    //画像をライブラリから取得するために必要
     ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -90,6 +95,7 @@ public class CreateRestaurantActivity extends AppCompatActivity {
         Button RestNewEntryButton = findViewById(R.id.RestNewEntryButton);
 
 
+        //イメージボタンが押されたとき写真を選ぶ
         SelectImgButton.setOnClickListener( v -> {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -102,9 +108,11 @@ public class CreateRestaurantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String newName = RestNewName.getText().toString();
-
                 if(!newName.equals("")){
-                    setPreferences(newName,"画像");
+                    setPreferences(newName,newImagURI.toString());
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(), "店名を入力してください", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -119,6 +127,8 @@ public class CreateRestaurantActivity extends AppCompatActivity {
     public void setPreferences(String newImg,String newName){
         RimgList.add(newImg);
         RnameList.add(newName);
+        System.out.println("レストランIMGリスト::"+RimgList);
+        System.out.println("レストラン名前リスト::"+RnameList);
         //arrayListをString変換してリファレンスに登録
         editor.putString(ListImg, String.join(",", RimgList));
         editor.putString(ListName, String.join(",", RnameList));
@@ -126,15 +136,13 @@ public class CreateRestaurantActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    //画像表示
     void openImage(Intent resultData){
         ParcelFileDescriptor pfDescriptor = null;
         try{
-            Uri uri = resultData.getData();
-            // Uriを表示
-            RestNewName.setText(
-                    String.format(Locale.US, "Uri:　%s",uri.toString()));
+            newImagURI = resultData.getData();
 
-            pfDescriptor = getContentResolver().openFileDescriptor(uri, "r");
+            pfDescriptor = getContentResolver().openFileDescriptor(newImagURI, "r");
             if(pfDescriptor != null){
                 FileDescriptor fileDescriptor = pfDescriptor.getFileDescriptor();
                 Bitmap bmp = BitmapFactory.decodeFileDescriptor(fileDescriptor);
