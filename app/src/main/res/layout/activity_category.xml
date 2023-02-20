@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".RestaurantActivity">
 
+
     <ListView
         android:id="@+id/CategoryLisy"
         android:layout_width="409dp"
@@ -14,7 +15,8 @@
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/CategoryNewCreateButton"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp" />
+        tools:layout_editor_absoluteX="1dp"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/CategoryNewCreateButton"
