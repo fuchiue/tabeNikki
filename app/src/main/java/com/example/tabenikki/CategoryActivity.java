@@ -33,6 +33,7 @@ public class CategoryActivity extends AppCompatActivity {
     int deleteIndex;//CategoryListのデータ削除のさいIndexを指定する変数
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +50,7 @@ public class CategoryActivity extends AppCompatActivity {
         String onString = data.getString(list, "");
         //変換してコンマ区切りになったStringデータをアレイリストに変換
         CategoryList = new ArrayList<>(Arrays.asList(onString.split("\\s*,\\s*")));
-        //Listが空白の場合NULLにする
+        //Listの０番目に空白がある場合削除する
         if(CategoryList.get(0).equals("")){
             CategoryList.remove(0);
         }
@@ -144,9 +145,9 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // クリックされた場所の処理を追加
-                Intent intent = new Intent(getApplicationContext(), RestaurantActivity.class);
-                intent.putExtra("CategoryKey", CategoryList.get(position)); // 送信するデータを設定
-                startActivity(intent);
+                Intent RestIntent = new Intent(getApplicationContext(), RestaurantActivity.class);
+                RestIntent.putExtra("CategoryKey", CategoryList.get(position)); // 送信するデータを設定
+                startActivity(RestIntent);
             }
         });
 
